@@ -58,6 +58,9 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
+            'templates',
+            'blog/templates/blog',
+            'bookmark/templates/bookmark',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
