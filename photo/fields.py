@@ -1,4 +1,4 @@
-import os
+import os.path
 
 from PIL import Image
 from django.db.models.fields.files import ImageFieldFile, ImageField
@@ -14,6 +14,10 @@ class ThumbnailImageFieldFile(ImageFieldFile):
 
     @property
     def thumb_path(self):
+        return self._add_thumb(self.path)
+
+    @property
+    def thumb_url(self):
         return self._add_thumb(self.url)
 
     def save(self, name, content, save=True):
