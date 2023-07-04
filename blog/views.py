@@ -51,8 +51,8 @@ class PostMAV(MonthArchiveView):
 
 class PostDAV(DayArchiveView):
     model = Post
-    month_format = '%m'
     date_field = 'modify_dt'
+    month_format = '%m'
 
 
 class PostTAV(TodayArchiveView):
@@ -94,27 +94,31 @@ class SearchFormView(FormView):
 
         return render(self.request, self.template_name, context)
 
-    class PostCreateView(LoginRequiredMixin, CreateView):
-        model = Post
-        fields = ['title', 'slug', 'description', 'content', 'tags']
-        initial = {'slug': 'auto-filling-do-not-input'}
-        success_url = reverse_lazy('blog:index')
 
-        def form_valid(self, form):
-            form.instance.owner = self.request.user
-            return super().form_valid(form)
 
-    class PostChangeLV(LoginRequiredMixin, ListView):
-        template_name = 'blog/post_change_list.html'
+class PostCreateView(LoginRequiredMixin, CreateView):
+    model = Post
+    fields = ['title', 'slug', 'description', 'content', 'tags']
+    initial = {'slug': 'auto-filling-do-not-input'}
+    success_url = reverse_lazy('blog:index')
 
-        def get_queryset(self):
-            return Post.objects.filter(owner=self.request.user)
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
 
-    class PostUpdateView(OwnerOnlyMixin, UpdateView):
-        model = Post
-        fields = ['title', 'slug', 'description', 'content', 'tags']
-        success_url = reverse_lazy('blog:index')
+class PostChangeLV(LoginRequiredMixin, ListView):
+    template_name = 'blog/post_change_list.html'
 
-    class PostDeleteView(OwnerOnlyMixin, DeleteView):
-        model = Post
-        success_url = reverse_lazy('blog:index')
+    def get_queryset(self):
+        return Post.objects.filter(owner=self.request.user)
+
+
+class PostUpdateView(OwnerOnlyMixin, UpdateView):
+    model = Post
+    fields = ['title', 'slug', 'description', 'content', 'tags']
+    success_url = reverse_lazy('blog:index')
+
+
+class PostDeleteView(OwnerOnlyMixin, DeleteView):
+    model = Post
+    success_url = reverse_lazy('blog:index')
